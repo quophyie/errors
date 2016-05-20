@@ -1,0 +1,22 @@
+{
+  "name": "@c8/errors",
+  "version": "0.0.1",
+  "description": "Common errors and their utils used by C8 management",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/c8management/errors.git"
+  },
+  "author": "Pavel Pichrt <pavel@pichrt.cz> (http://pichrt.cz)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/c8management/errors/issues"
+  },
+  "homepage": "https://github.com/c8management/errors#readme",
+  "dependencies": {
+    "create-error": "^0.3.1"
+  }
+}
