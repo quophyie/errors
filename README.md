@@ -20,13 +20,18 @@ throw new Errors.TypeError('Error message', {
 
 #### With defaut mapping
 ```javascript
-let boomErr = Errors.utils.toBoom(err)
+let myError = new Errors.TypeError('Message')
+let boomErr = Errors.utils.toBoom(myError)
 ```
 
 #### With custom mapping
 ```javascript
 // mapping format: { BoomError: ['CustomError1', 'CustomError2'] }
-let boomErr = Errors.utils.toBoom(err, {
+let myError = new Errors.TypeError('Message', {
+  param1: 'foo'
+})
+
+let boomErr = Errors.utils.toBoom(myError, {
   entityTooLarge: ['FileTooLargeError', 'OtherCustomError'],
   unsupportedMediaType: ['TypeError']
 })
