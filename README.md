@@ -25,8 +25,9 @@ let boomErr = Errors.utils.toBoom(err)
 
 #### With custom mapping
 ```javascript
+// mapping format: { BoomError: ['CustomError1', 'CustomError2'] }
 let boomErr = Errors.utils.toBoom(err, {
-  entityTooLarge: ['FileTooLargeError'],
+  entityTooLarge: ['FileTooLargeError', 'OtherCustomError'],
   unsupportedMediaType: ['TypeError']
 })
 ```
