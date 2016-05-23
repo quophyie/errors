@@ -1,6 +1,6 @@
 {
   "name": "@c8/errors",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Common errors and their utils used by C8 management",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/c8management/errors#readme",
   "dependencies": {
+    "boom": "^3.2.1",
     "create-error": "^0.3.1"
   }
 }
