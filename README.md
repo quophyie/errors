@@ -1,16 +1,30 @@
 # @c8/errors
-Common error type in our components
+Common error types and utils for use in our components
 
 ## Usage
-- `npm i --save @c8/errors`
+```javascript
+'use strict'
 
-- ```javascript
 const Errors = require('@c8/errors')
+```
 
-// You will typically be fine just keeping the default mapping
+### Throw a custom Error with parameters
+```javascript
+throw new Errors.TypeError('Error message', {
+  myParam1: 'Foo',
+  myParam2: 'Bar'
+})
+```
+
+### Translate your error to Boom error
+
+#### With defaut mapping
+```javascript
 let boomErr = Errors.utils.toBoom(err)
+```
 
-// But you can also specify the second parameter of toBoom() if I don't like the default mapping
+#### With custom mapping
+```javascript
 let boomErr = Errors.utils.toBoom(err, {
   entityTooLarge: ['FileTooLargeError'],
   unsupportedMediaType: ['TypeError']
