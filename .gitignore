@@ -31,3 +31,9 @@ node_modules
 
 # Optional REPL history
 .node_repl_history
+
+# Jetbrains Webstorm IDE
+.idea/*
+
+# DotEnv Environment variables
+.env
