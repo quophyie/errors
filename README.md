@@ -6,6 +6,7 @@ Common error types and utils for use in our components
 'use strict'
 
 const Errors = require('@c8/errors')
+const createError = require('create-error')
 ```
 
 ### Throw a custom Error with parameters
@@ -18,22 +19,28 @@ throw new Errors.TypeError('Error message', {
 
 ### Translate your error to Boom error
 
-#### With defaut mapping
+#### With default mapping
 ```javascript
 let myError = new Errors.TypeError('Message')
 let boomErr = Errors.utils.toBoom(myError)
 ```
 
-#### With custom mapping
+#### With custom error and mapping
 ```javascript
-// mapping format: { BoomError: ['CustomError1', 'CustomError2'] }
-let myError = new Errors.TypeError('Message', {
+const MyCustomErrors = {
+  Err1: createError('Err1'),
+  Err2: createError('Err2'),
+  Err3: createError('Err3')
+}
+
+let myError = new MyCustomErrors.Err1('Message', {
   param1: 'foo'
 })
 
-let boomErr = Errors.utils.toBoom(myError, {
-  entityTooLarge: ['FileTooLargeError', 'OtherCustomError'],
-  unsupportedMediaType: ['TypeError']
+// mapping format: { BoomError: ['CustomError1', 'CustomError2'] }
+let boomErr = Errors.utils.toBoom(myError, MyCustomErrors, {
+  entityTooLarge: ['Err1', 'Err2'],
+  unsupportedMediaType: ['Err3']
 })
 ```
 
