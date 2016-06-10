@@ -5,7 +5,6 @@ const chai = require('chai')
 const Errors = require('../index')
 const createError = require('create-error')
 const Boom = require('boom')
-const expect = require('chai').expect
 
 chai.should()
 
