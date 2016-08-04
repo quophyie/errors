@@ -5,6 +5,8 @@ const chai = require('chai')
 const Errors = require('../index')
 const createError = require('create-error')
 const Boom = require('boom')
+const RequestPromiseErrors = require('request-promise/errors')
+const httpStatus = require('http-status')
 
 chai.should()
 
@@ -93,6 +95,73 @@ describe('Custom errors', () => {
 
     it('should not be changed during conversion', () => {
       newBoomErr.should.be.deep.equal(BoomGatewayError)
+    })
+  })
+
+  describe('Request Promise RequestError Conversion', () => {
+    let newBoomErr, cause
+
+    it('should return 502 for "ECONNREFUSED" errors', () => {
+      cause = {
+        code: 'ECONNREFUSED'
+      }
+      const err = new RequestPromiseErrors.RequestError(cause)
+      newBoomErr = Errors.utils.toBoom(err)
+      newBoomErr.should.have.a.deep.property('output.statusCode', 502)
+    })
+
+    it('should return 502 Bad Gateway for "EADDRINUSE" errors', () => {
+      cause = {
+        code: 'EADDRINUSE'
+      }
+      const err = new RequestPromiseErrors.RequestError(cause)
+      newBoomErr = Errors.utils.toBoom(err)
+      newBoomErr.should.have.a.deep.property('output.statusCode', 502)
+    })
+
+    it('should return 502 Bad Gateway for "ECONNRESET" errors', () => {
+      cause = {
+        code: 'ECONNRESET'
+      }
+      const err = new RequestPromiseErrors.RequestError(cause)
+      newBoomErr = Errors.utils.toBoom(err)
+      newBoomErr.should.have.a.deep.property('output.statusCode', 502)
+    })
+
+    it('should return 502 Bad Gateway for "EPIPE" errors', () => {
+      cause = {
+        code: 'EPIPE'
+      }
+      const err = new RequestPromiseErrors.RequestError(cause)
+      newBoomErr = Errors.utils.toBoom(err)
+      newBoomErr.should.have.a.deep.property('output.statusCode', 502)
+    })
+
+    it('should return 503, Timeout for "ETIMEDOUT" errors', () => {
+      cause = {
+        code: 'ETIMEDOUT'
+      }
+      const err = new RequestPromiseErrors.RequestError(cause)
+      newBoomErr = Errors.utils.toBoom(err)
+      newBoomErr.should.have.a.deep.property('output.statusCode', 503)
+    })
+  })
+
+  describe('Request Promise StatusCodeError Error conversions', () => {
+    let newBoomErr
+
+    it('should return 403 Forbidden', () => {
+      const err = new RequestPromiseErrors.StatusCodeError(httpStatus.FORBIDDEN)
+      newBoomErr = Errors.utils.toBoom(err)
+      newBoomErr.should.have.a.deep.property('output.statusCode', httpStatus.FORBIDDEN)
+      newBoomErr.should.have.a.deep.property('message', 'Forbidden')
+    })
+
+    it('should return 401 Unauthorised', () => {
+      const err = new RequestPromiseErrors.StatusCodeError(httpStatus.UNAUTHORIZED)
+      newBoomErr = Errors.utils.toBoom(err)
+      newBoomErr.should.have.a.deep.property('output.statusCode', httpStatus.UNAUTHORIZED)
+      newBoomErr.should.have.a.deep.property('message', 'Unauthorized')
     })
   })
 })
