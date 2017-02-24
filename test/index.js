@@ -16,6 +16,17 @@ const MyCustomErrors = {
   Unauthorized2: createError('Unauthorized2')
 }
 
+// Passport JWT Error
+function AuthenticationError(message, status) {
+  Error.call(this);
+  // Error.captureStackTrace(this, arguments.callee);
+  this.name = 'AuthenticationError';
+  this.message = message;
+  this.status = status || 401;
+}
+AuthenticationError.prototype.__proto__ = Error.prototype;
+// ----------------------------
+
 const testParams = {
   param1: 'test1',
   param2: 'test2'
@@ -29,7 +40,7 @@ const BoomGatewayError = new Boom.badGateway('Test message 1', testParams)
 
 const customMapping = {
   forbidden: ['ForbiddenErr'],
-  unauthorized: ['Unauthorized1', 'Unauthorized2']
+  unauthorized: ['Unauthorized1', 'Unauthorized2', 'AuthenticationError']
 }
 
 describe('Custom errors', () => {
@@ -162,6 +173,18 @@ describe('Custom errors', () => {
       newBoomErr = Errors.utils.toBoom(err)
       newBoomErr.should.have.a.deep.property('output.statusCode', httpStatus.UNAUTHORIZED)
       newBoomErr.should.have.a.deep.property('message', 'Unauthorized')
+    })
+  })
+
+  describe('Passport JWT Auth error handling', () => {
+    let err
+
+    before(() => {
+      err = Errors.utils.toBoom(new AuthenticationError(401), MyCustomErrors, customMapping)
+    })
+
+    it('should return 401', () => {
+      err.should.have.a.deep.property('output.statusCode', 401)
     })
   })
 })
