@@ -1,4 +1,4 @@
-# @c8/errors
+# @quantal/errors
 Common error types and utils for use in our components
 
 ## Usage
