@@ -1,11 +1,11 @@
-# @quantal/errors
+# Quantal Errors
 Common error types and utils for use in our components
 
 ## Usage
 ```javascript
 'use strict'
 
-const Errors = require('@c8/errors')
+const Errors = require('quantal-errors')
 const createError = require('create-error')
 ```
 
