@@ -17,14 +17,14 @@ const MyCustomErrors = {
 }
 
 // Passport JWT Error
-function AuthenticationError(message, status) {
-  Error.call(this);
+function AuthenticationError (message, status) {
+  Error.call(this)
   // Error.captureStackTrace(this, arguments.callee);
-  this.name = 'AuthenticationError';
-  this.message = message;
-  this.status = status || 401;
+  this.name = 'AuthenticationError'
+  this.message = message
+  this.status = status || 401
 }
-AuthenticationError.prototype.__proto__ = Error.prototype;
+AuthenticationError.prototype.__proto__ = Error.prototype
 // ----------------------------
 
 const testParams = {
@@ -109,6 +109,34 @@ describe('Custom errors', () => {
     })
   })
 
+  describe('Celebrate ValidationError that is not Boom Error', () => {
+    let newBoomErr
+
+    it('should return 400 Forbidden', () => {
+      const ValidationError = createError('ValidationError')
+      const err = new ValidationError()
+      err.isJoi = true
+      err.isBoom = false
+      newBoomErr = Errors.utils.toBoom(err)
+      newBoomErr.should.have.a.deep.property('output.statusCode', httpStatus.BAD_REQUEST)
+      newBoomErr.should.have.a.deep.property('message', `ValidationError`)
+    })
+
+    it('should return 401 Unauthorised', () => {
+      const err = new RequestPromiseErrors.StatusCodeError(httpStatus.UNAUTHORIZED, 'Unauthorized')
+      newBoomErr = Errors.utils.toBoom(err)
+      newBoomErr.should.have.a.deep.property('output.statusCode', httpStatus.UNAUTHORIZED)
+      newBoomErr.should.have.a.deep.property('message', `401 - "Unauthorized"`)
+    })
+
+    it('should return 401 Unauthorised', () => {
+      const err = new RequestPromiseErrors.StatusCodeError(httpStatus.UNAUTHORIZED, 'Unauthorized')
+      newBoomErr = Errors.utils.toBoom(err)
+      newBoomErr.should.have.a.deep.property('output.statusCode', httpStatus.UNAUTHORIZED)
+      newBoomErr.should.have.a.deep.property('message', `401 - "Unauthorized"`)
+    })
+  })
+
   describe('Request Promise RequestError Conversion', () => {
     let newBoomErr, cause
 
@@ -162,17 +190,24 @@ describe('Custom errors', () => {
     let newBoomErr
 
     it('should return 403 Forbidden', () => {
-      const err = new RequestPromiseErrors.StatusCodeError(httpStatus.FORBIDDEN)
+      const err = new RequestPromiseErrors.StatusCodeError(httpStatus.FORBIDDEN, 'Forbidden')
       newBoomErr = Errors.utils.toBoom(err)
       newBoomErr.should.have.a.deep.property('output.statusCode', httpStatus.FORBIDDEN)
-      newBoomErr.should.have.a.deep.property('message', 'Forbidden')
+      newBoomErr.should.have.a.deep.property('message', `403 - "Forbidden"`)
     })
 
     it('should return 401 Unauthorised', () => {
-      const err = new RequestPromiseErrors.StatusCodeError(httpStatus.UNAUTHORIZED)
+      const err = new RequestPromiseErrors.StatusCodeError(httpStatus.UNAUTHORIZED, 'Unauthorized')
       newBoomErr = Errors.utils.toBoom(err)
       newBoomErr.should.have.a.deep.property('output.statusCode', httpStatus.UNAUTHORIZED)
-      newBoomErr.should.have.a.deep.property('message', 'Unauthorized')
+      newBoomErr.should.have.a.deep.property('message', `401 - "Unauthorized"`)
+    })
+
+    it('should return 401 Unauthorised', () => {
+      const err = new RequestPromiseErrors.StatusCodeError(httpStatus.UNAUTHORIZED, 'Unauthorized')
+      newBoomErr = Errors.utils.toBoom(err)
+      newBoomErr.should.have.a.deep.property('output.statusCode', httpStatus.UNAUTHORIZED)
+      newBoomErr.should.have.a.deep.property('message', `401 - "Unauthorized"`)
     })
   })
 
